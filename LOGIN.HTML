@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/FAVICON.png">
+    <title>Ingreso / Registro - Finanzas App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/LOGIN.Css">
+    <style>
+        /* Clases de utilidad básicas */
+        .hidden { display: none !important; }
+        /* Estilo input error (puede ir en CSS principal también) */
+        input.error {
+            border-color: var(--color-error, #e53e3e) !important;
+            background-color: var(--color-error-bg-input, #fff5f5) !important;
+        }
+        input.error + .input-icon { /* Colorear icono si hay error */
+             color: var(--color-error, #e53e3e) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+
+        <div class="auth-header">
+            <i class="fas fa-wallet brand-icon"></i>
+            <h1>Finanzas App</h1>
+        </div>
+
+        <div id="security-warning" class="subtle-warning">
+            <i class="fas fa-shield-alt"></i>
+            <span>Sitio de demostración. <strong>No uses datos reales.</strong></span>
+        </div>
+
+        <div id="login-section">
+            <h2>Iniciar Sesión</h2>
+            <form id="login-form" novalidate>
+                <div id="login-error" class="error-message" aria-live="assertive"></div>
+
+                <div class="form-group">
+                    <label for="login-email">Correo Electrónico</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="login-email" name="email" required autocomplete="email" placeholder="tu.correo@ejemplo.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <div class="input-wrapper">
+                         <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="login-password" name="password" required autocomplete="current-password" placeholder="••••••••">
+                    </div>
+                    </div>
+
+                <button type="submit" class="auth-button">
+                    Ingresar <i class="fas fa-arrow-right btn-icon-right"></i>
+                </button>
+            </form>
+            <p class="toggle-link">¿No tienes cuenta? <a href="#" id="show-register">Regístrate aquí</a></p>
+        </div>
+
+        <div id="register-section" class="hidden">
+            <h2>Crear Cuenta Nueva</h2>
+            <form id="register-form" novalidate>
+                 <div id="register-error" class="error-message" aria-live="assertive"></div>
+
+                 <div class="form-group">
+                    <label for="register-username">Nombre de Usuario</label>
+                     <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="register-username" name="username" required autocomplete="username" placeholder="Elige un nombre de usuario">
+                    </div>
+                    <small class="input-hint">Mínimo 5 caracteres.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-email">Correo Electrónico</label>
+                     <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="register-email" name="email" required autocomplete="email" placeholder="tu.correo@ejemplo.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-password">Contraseña</label>
+                     <div class="input-wrapper">
+                         <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="register-password" name="password" required autocomplete="new-password" placeholder="Crea una contraseña (mín. 6 car.)">
+                    </div>
+                     <small class="input-hint">Mínimo 6 caracteres.</small>
+                </div>
+
+                 <div class="form-group">
+                    <label for="register-confirm-password">Confirmar Contraseña</label>
+                     <div class="input-wrapper">
+                         <i class="fas fa-check-circle input-icon"></i>
+                        <input type="password" id="register-confirm-password" name="confirmPassword" required autocomplete="new-password" placeholder="Repite la contraseña">
+                    </div>
+                </div>
+
+                <button type="submit" class="auth-button">
+                    Registrarse <i class="fas fa-user-plus btn-icon-right"></i>
+                </button>
+            </form>
+            <p class="toggle-link">¿Ya tienes cuenta? <a href="#" id="show-login">Inicia sesión aquí</a></p>
+        </div>
+
+    </div> <script src="/AUTH.JS"></script>
+</body>
+</html>

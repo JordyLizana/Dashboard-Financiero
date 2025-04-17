@@ -1,0 +1,362 @@
+/* ================================================== */
+/* ARCHIVO: login.css                                 */
+/* Estilos VISUALMENTE MEJORADOS para autenticación   */
+/* ================================================== */
+
+/* --- Variables --- */
+:root {
+    --color-background: #f8f9fe; /* Fondo muy claro, casi blanco */
+    --color-surface: #ffffff;
+    --color-text-primary: #1f2937; /* Gris oscuro casi negro */
+    --color-text-secondary: #6b7280; /* Gris medio */
+    --color-text-muted: #9ca3af; /* Gris claro */
+    --color-border: #e5e7eb; /* Borde gris muy claro */
+    --color-accent: #6d28d9; /* Morado más vibrante */
+    --color-accent-light: #ede9fe; /* Morado muy claro (para fondos sutiles) */
+    --color-accent-dark: #5b21b6; /* Morado oscuro para hover */
+    --color-primary-button: var(--color-accent);
+    --color-primary-button-hover: var(--color-accent-dark);
+    --color-error: #dc2626;      /* Rojo */
+    --color-error-bg: #fee2e2; /* Fondo rojo muy claro */
+    --color-error-border: #fca5a5;
+    --color-error-bg-input: #fef2f2;
+
+    --color-warning-bg: #fefce8; /* Amarillo más sutil */
+    --color-warning-border: #fef08a;
+    --color-warning-text: #854d0e; /* Marrón oscuro */
+    --color-warning-icon: #eab308; /* Amarillo */
+
+    --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --border-radius-sm: 0.25rem; /* 4px */
+    --border-radius-md: 0.5rem;  /* 8px */
+    --border-radius-lg: 0.75rem; /* 12px */
+
+    --spacing-1: 0.25rem; --spacing-2: 0.5rem; --spacing-3: 0.75rem;
+    --spacing-4: 1rem;    --spacing-5: 1.25rem; --spacing-6: 1.5rem;
+    --spacing-8: 2rem;   --spacing-10: 2.5rem; --spacing-12: 3rem;
+
+    --box-shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.07); /* Sombra suave */
+    --box-shadow-focus: 0 0 0 3px rgba(109, 40, 217, 0.25); /* Sombra focus morada */
+    --transition-duration: 0.2s; /* Corregido nombre variable */
+    --transition-timing: ease-in-out;
+}
+
+/* --- Estilos Base --- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: var(--font-family-sans);
+    /* Fondo con gradiente diagonal muy sutil */
+    background: linear-gradient(135deg, var(--color-background) 0%, #f3f4f8 100%);
+    color: var(--color-text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: var(--spacing-4);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Contenedor Principal --- */
+.auth-container {
+    background-color: var(--color-surface);
+    padding: var(--spacing-8) var(--spacing-8); /* Padding consistente */
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow-card);
+    border: 1px solid var(--color-border);
+    /* Quitamos borde superior de acento */
+    width: 100%;
+    max-width: 420px; /* Más compacto */
+    text-align: center;
+    overflow: hidden; /* Para asegurar bordes redondeados */
+}
+
+/* --- Cabecera con Logo/Título --- */
+.auth-header {
+    display: flex;
+    flex-direction: column; /* Icono arriba, texto abajo */
+    align-items: center;
+    margin-bottom: var(--spacing-6);
+}
+.brand-icon {
+    font-size: 2.5rem; /* Icono más grande */
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-3);
+    /* Opcional: fondo sutil */
+    /* background-color: var(--color-accent-light); */
+    /* padding: var(--spacing-3); */
+    /* border-radius: 50%; */
+}
+.auth-header h1 {
+    font-size: 1.5rem; /* Tamaño adecuado */
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+}
+
+/* Título de Sección (Login/Register) */
+h2 {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-regular);
+    margin-bottom: var(--spacing-6); /* Espacio antes del form */
+    margin-top: 0;
+}
+
+/* --- Advertencia de Seguridad (Sutil) --- */
+#security-warning.subtle-warning {
+    background-color: transparent; /* Sin fondo */
+    border: none; /* Sin borde */
+    color: var(--color-text-muted); /* Color de texto tenue */
+    padding: 0;
+    margin: 0 auto var(--spacing-4) auto; /* Centrado, espacio abajo */
+    text-align: center;
+    font-size: 0.75rem; /* Más pequeño */
+    line-height: 1.4;
+    max-width: 90%; /* Evitar que sea demasiado ancho */
+}
+#security-warning.subtle-warning i {
+    color: var(--color-text-muted); /* Icono del mismo color */
+    font-size: 0.9em;
+    margin-right: var(--spacing-1);
+    vertical-align: middle; /* Alinear icono con texto */
+}
+#security-warning.subtle-warning strong {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary); /* Resaltar parte importante */
+}
+
+
+/* --- Formularios y Grupos --- */
+#login-form,
+#register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-5);
+    text-align: left;
+    position: relative; /* Para posicionar elementos internos si es necesario */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-2);
+    font-weight: var(--font-weight-medium);
+    font-size: 0.875rem; /* 14px */
+    color: var(--color-text-primary); /* Label más oscuro */
+}
+
+/* --- Inputs con Iconos --- */
+.input-wrapper {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: var(--spacing-3); /* Posición del icono */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem; /* Tamaño del icono */
+    color: var(--color-text-muted); /* Color del icono */
+    pointer-events: none; /* Para que no interfiera con el clic en el input */
+    transition: color var(--transition-duration) var(--transition-timing);
+    z-index: 2; /* Asegurar que esté sobre el input si hay fondo */
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"] {
+    width: 100%;
+    padding: var(--spacing-3) var(--spacing-4) var(--spacing-3) calc(var(--spacing-3) + var(--spacing-4) + var(--spacing-1)); /* Padding: T R B LEFT (left+icon_width+gap) */
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    background-color: var(--color-surface); /* Fondo blanco */
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+    transition: border-color var(--transition-duration) var(--transition-timing),
+                box-shadow var(--transition-duration) var(--transition-timing);
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+.form-group input::placeholder {
+     color: var(--color-text-muted);
+     font-size: 0.9rem;
+     opacity: 1; /* Placeholder visible */
+}
+
+/* Efecto focus en input y su icono */
+.form-group input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: var(--box-shadow-focus);
+}
+.form-group input:focus + .input-icon {
+    color: var(--color-accent); /* Cambiar color del icono en focus */
+}
+
+/* Pista debajo del input */
+.input-hint {
+     font-size: 0.8rem; /* Ligeramente más grande */
+     color: var(--color-text-secondary);
+     display: block;
+     margin-top: var(--spacing-2); /* Más espacio */
+}
+
+/* --- Botón Principal --- */
+.auth-button {
+    width: 100%;
+    padding: var(--spacing-3) var(--spacing-4);
+    background: var(--color-primary-button);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-size: 0.95rem;
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: background-color var(--transition-duration) var(--transition-timing),
+                transform var(--transition-duration) var(--transition-timing),
+                box-shadow var(--transition-duration) var(--transition-timing);
+    margin-top: var(--spacing-4);
+    line-height: 1.5;
+    letter-spacing: 0.3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-2);
+    box-shadow: 0 4px 6px -1px rgba(109, 40, 217, 0.15), 0 2px 4px -2px rgba(109, 40, 217, 0.1);
+}
+.auth-button .btn-icon-right {
+    transition: transform var(--transition-duration) var(--transition-timing);
+    font-size: 0.9em; /* Icono ligeramente más pequeño */
+}
+.auth-button .fa-spinner { /* Estilo específico para el spinner */
+     font-size: 1.1em;
+ }
+
+
+.auth-button:hover {
+    background: var(--color-primary-button-hover);
+    box-shadow: 0 6px 10px -3px rgba(109, 40, 217, 0.2), 0 4px 6px -4px rgba(109, 40, 217, 0.15);
+}
+.auth-button:hover:not(:disabled) .btn-icon-right { /* No animar icono si el botón está deshabilitado */
+     transform: translateX(3px);
+}
+
+.auth-button:active:not(:disabled) {
+    transform: scale(0.98);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+.auth-button:disabled {
+     opacity: 0.7;
+     cursor: not-allowed;
+     box-shadow: none;
+ }
+
+/* --- Enlace para cambiar entre Login/Registro --- */
+.toggle-link {
+    margin-top: var(--spacing-6);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.toggle-link a {
+    color: var(--color-accent);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.toggle-link a:hover {
+    color: var(--color-primary-button-hover);
+    text-decoration: underline;
+}
+
+/* --- Mensajes de Error --- */
+.error-message {
+    color: var(--color-error);
+    background-color: var(--color-error-bg);
+    border: 1px solid var(--color-error-border);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+    font-size: 0.875rem;
+    text-align: left;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+.error-message:empty {
+    display: none;
+}
+/* Añadir icono al mensaje de error (opcional) */
+.error-message::before {
+     font-family: "Font Awesome 6 Free"; /* Asegúrate que coincida con la fuente de FontAwesome */
+     font-weight: 900; /* Peso para iconos sólidos */
+     content: "\f071"; /* Código unicode para exclamation-triangle */
+     margin-right: var(--spacing-2);
+     font-size: 1em;
+}
+
+
+/* --- Clase de utilidad --- */
+.hidden {
+    display: none !important;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+     body {
+         padding: var(--spacing-2);
+     }
+     .auth-container {
+         padding: var(--spacing-6) var(--spacing-4);
+         max-width: 100%;
+         margin: var(--spacing-2);
+     }
+     .auth-header h1 {
+         font-size: 1.4rem;
+     }
+     h2 {
+          font-size: 1rem;
+          margin-bottom: var(--spacing-5);
+     }
+     .form-group {
+          margin-bottom: var(--spacing-4);
+     }
+     #security-warning.subtle-warning {
+         font-size: 0.7rem;
+         margin-bottom: var(--spacing-3);
+         text-align: left; /* Mejor en móvil */
+     }
+    .form-group input[type="email"],
+    .form-group input[type="password"],
+    .form-group input[type="text"] {
+        font-size: 0.9rem;
+         /* Ajustar padding izquierdo para icono en móvil si es necesario */
+         padding: var(--spacing-2) var(--spacing-3) var(--spacing-2) calc(var(--spacing-2) + var(--spacing-3) + var(--spacing-1));
+    }
+    .input-icon {
+         left: var(--spacing-2);
+         font-size: 0.8rem;
+    }
+    .auth-button {
+        font-size: 0.9rem;
+        padding: var(--spacing-2) var(--spacing-3);
+    }
+    .toggle-link {
+        font-size: 0.85rem;
+        margin-top: var(--spacing-5);
+    }
+}

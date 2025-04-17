@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/FAVICON.png">
+    <title>Dashboard Financiero Pro</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/STYLE.CSS">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment/locale/es.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        /* Estilos menores o temporales específicos de esta página */
+        .hidden { display: none !important; }
+
+        /* Estilos básicos para enlaces en la lista de reportes descargados */
+        #downloaded-reports-list a {
+            color: var(--color-accent, #6B46C1);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: var(--font-weight-medium);
+        }
+        #downloaded-reports-list a:hover {
+            text-decoration: underline;
+            color: var(--color-primary-button-hover, #553c9a);
+        }
+        #downloaded-reports-list li {
+            padding: 0; margin: 0;
+            margin-bottom: var(--spacing-2, 0.5rem);
+            padding-bottom: var(--spacing-2, 0.5rem);
+            border-bottom: 1px dashed var(--color-border, #e2e8f0);
+            line-height: 1.4;
+        }
+        #downloaded-reports-list li:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+        .report-timestamp {
+            font-size: 0.75rem;
+            color: var(--color-text-muted, #a0aec0);
+            display: block;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="page-loader">
+        <div class="spinner"></div>
+        <p>Preparando tu dashboard...</p>
+    </div>
+    <div class="app-layout">
+        <aside class="sidebar">
+             <div class="sidebar-header">
+                 <i class="fas fa-wallet"></i>
+                 <h1>Finanzas</h1>
+             </div>
+             <nav class="sidebar-nav">
+                 <ul>
+                     <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                     <li><a href="#transactions"><i class="fas fa-exchange-alt"></i> Transacciones</a></li>
+                     <li><a href="#reports"><i class="fas fa-chart-pie"></i> Reportes</a></li>
+                     </ul>
+             </nav>
+             <div class="sidebar-footer">
+                 <p>&copy; 2025 Finanzas App</p>
+             </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header card" id="main-app-header">
+                <div id="welcome-container">
+                     <h2 id="welcome-message">Cargando...</h2>
+                     <p>Gestiona tus finanzas personales.</p>
+                </div>
+                <button id="logout-button" class="btn btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </header>
+
+            <div class="dashboard-grid">
+                <section class="input-section card">
+                    <h2><i class="fas fa-plus-circle"></i> Nueva Transacción</h2>
+                    <form id="transaction-form" novalidate>
+                        <div class="form-group type-group">
+                            <label><input type="radio" name="type" value="income" required checked> <i class="fas fa-arrow-down income-icon"></i> Ingreso</label>
+                            <label><input type="radio" name="type" value="expense" required> <i class="fas fa-arrow-up expense-icon"></i> Gasto</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descripción:</label>
+                            <input type="text" id="description" name="description" required placeholder="Ej: Salario, Comida supermercado">
+                            <span class="error-message" id="description-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Monto:</label>
+                            <div class="input-with-currency">
+                                <span>$</span>
+                                <input type="number" id="amount" name="amount" min="0.01" step="0.01" required placeholder="0">
+                                <span class="error-message" id="amount-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group hidden" id="category-group">
+                             <label for="category">Categoría (Gasto):</label>
+                            <select id="category" name="category">
+                                <option value="" disabled selected>Selecciona una categoría...</option>
+                                <option value="comida">Comida</option>
+                                <option value="transporte">Transporte</option>
+                                <option value="vivienda">Vivienda</option>
+                                <option value="servicios">Servicios</option>
+                                <option value="ocio">Ocio</option>
+                                <option value="ropa">Ropa</option>
+                                <option value="salud">Salud</option>
+                                <option value="educacion">Educación</option>
+                                <option value="regalos">Regalos</option>
+                                <option value="otros">Otros</option>
+                            </select>
+                            <span class="error-message" id="category-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Fecha:</label>
+                            <input type="date" id="date" name="date" required>
+                            <span class="error-message" id="date-error"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Agregar Transacción
+                        </button>
+                    </form>
+                </section>
+
+                <section class="summary-section card">
+                    <h2><i class="fas fa-calculator"></i> Resumen Rápido</h2>
+                     <div class="summary-metrics">
+                         <div><h4>Balance Actual</h4><p id="current-balance">$0</p></div>
+                         <div><h4>Ingresos (Mes)</h4><p id="monthly-income">$0</p></div>
+                         <div><h4>Gastos (Mes)</h4><p id="monthly-expense">$0</p></div>
+                         <div><h4>Balance (Mes)</h4><p id="monthly-balance">$0</p></div>
+                     </div>
+                     <div class="summary-totals">
+                         <h4>Totales Históricos</h4>
+                         <p>Ingresos: <span id="total-income">$0</span></p>
+                         <p>Gastos: <span id="total-expense">$0</span></p>
+                     </div>
+                </section>
+
+                <footer>
+                    <p>&copy; 2025 Dashboard Financiero</p>
+                </footer>
+            </div> <section id="transactions-page" class="content-section hidden">
+                <h2>Historial de Transacciones</h2>
+
+                <section class="transactions-section card">
+
+                    <div class="transaction-filters">
+                        <div class="filter-group">
+                            <legend>Mostrar:</legend>
+                            <label> <input type="radio" name="filterType" value="all" checked> Todos </label>
+                            <label> <input type="radio" name="filterType" value="income"> Ingresos </label>
+                            <label> <input type="radio" name="filterType" value="expense"> Gastos </label>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-category">Categoría:</label>
+                            <select id="filter-category" name="filterCategory" disabled>
+                                <option value="all">Todas</option>
+                                <option value="comida">Comida</option>
+                                <option value="transporte">Transporte</option>
+                                <option value="vivienda">Vivienda</option>
+                                <option value="servicios">Servicios</option>
+                                <option value="ocio">Ocio</option>
+                                <option value="ropa">Ropa</option>
+                                <option value="salud">Salud</option>
+                                <option value="educacion">Educación</option>
+                                <option value="regalos">Regalos</option>
+                                <option value="otros">Otros</option>
+                            </select>
+                        </div>
+                         <div class="filter-group">
+                             <button id="reset-filters-btn" class="btn-reset">
+                                 <i class="fas fa-undo-alt"></i> Limpiar
+                             </button>
+                         </div>
+                    </div>
+                    <ul id="transaction-list">
+                        <li class="transaction-item template hidden" style="display: none;">
+                            <div class="transaction-icon"><i class="fas"></i></div>
+                            <div class="transaction-info">
+                                <span class="transaction-description">Descripción</span>
+                                <span class="transaction-details">DD MMM YYYY - Categoría</span>
+                            </div>
+                            <span class="transaction-amount">-$0</span>
+                        </li>
+                        <li class="empty-list">No hay transacciones que coincidan con los filtros.</li>
+                    </ul>
+                </section> </section> <section id="reports-page" class="content-section hidden">
+                <h2>Reportes Financieros</h2>
+                 <div class="charts-wrapper">
+                     <section class="chart-container card" id="monthly-chart-card">
+                         <h2><i class="fas fa-chart-bar"></i> Flujo Mensual (Últimos 6 Meses)</h2>
+                         <canvas id="monthly-summary-chart"></canvas>
+                     </section>
+                     <section class="chart-container card" id="category-chart-card">
+                         <h2><i class="fas fa-chart-pie"></i> Gastos por Categoría (Mes Actual)</h2>
+                         <canvas id="expense-category-chart"></canvas>
+                     </section>
+                 </div>
+                 <section id="downloaded-reports-section" class="card">
+                     <h3><i class="fas fa-download"></i> Reportes PDF Guardados</h3>
+                     <ul id="downloaded-reports-list">
+                         <li class="empty-download-list">No has generado reportes todavía.</li>
+                     </ul>
+                     <p style="font-size: 0.8rem; color: var(--color-text-muted, #a0aec0); margin-top: var(--spacing-3, 0.75rem);">
+                         Nota: Haz clic en un reporte para volver a descargarlo. Los reportes se guardan en tu navegador.
+                     </p>
+                 </section>
+            </section> </main> </div> <div id="chatbot-container" class="chatbot-container hidden">
+         <div class="chatbot-header">
+             <span>Asistente Financiero</span>
+             <button id="close-chatbot" class="close-chatbot-btn" aria-label="Cerrar chat">&times;</button>
+         </div>
+         <div class="chatbot-messages">
+             <div class="message bot-message">¡Hola! ¿Cómo puedo ayudarte? Pregunta por tu balance o pide un "reporte PDF".</div>
+         </div>
+         <div class="chatbot-input">
+             <input type="text" id="chatbot-message-input" placeholder="Escribe tu consulta...">
+             <button id="send-chatbot-message" aria-label="Enviar mensaje">Enviar</button>
+         </div>
+    </div>
+    <button id="open-chatbot" class="open-chatbot-btn" aria-label="Abrir chat">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <script src="/SCRIPT.JS"></script>
+</body>
+</html>
